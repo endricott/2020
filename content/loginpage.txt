@@ -1,1 +1,1 @@
-input *2, user name password, link password vergessen  and if you dont have account redirect to form registration  , php db check if username user == db.userrigts { redirect ./admin/index  }
+input *2, user name password, link password vergessen  and if you dont have account redirect to form registration  , php db check if username user == db.userrigts { redirect ./admin/index  } else { redirect to ./public/index.htm(php)
