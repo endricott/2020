@@ -3,7 +3,7 @@
     <head>
         <title>Film löschen</title>
         <meta charset="UTF-8">
-        <link href="filmliste.css" rel="stylesheet">
+        <link href="../styles/style.css" rel="stylesheet">
     </head>
     <body>
         <div class="wrapper">

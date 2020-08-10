@@ -97,7 +97,7 @@ $pag_opt = "?titel=$suche&order=$sort&dest=$dest&seite=";
     <head>
         <meta charset="UTF-8">
         <title>Filmliste</title>
-        <link href="filmliste.css" rel="stylesheet">
+        <link href="../styles/style.css" rel="stylesheet">
     </head>
     <body>
             <h1>Filmliste</h1>

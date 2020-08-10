@@ -126,7 +126,7 @@ $pag_opt = "?titel={$_SESSION['suche']}&order={$_SESSION['sort']}&dest=$dest&sei
     <head>
         <meta charset="UTF-8">
         <title>Filmliste</title>
-        <link href="filmliste.css" rel="stylesheet">
+        <link href="../styles/style.css" rel="stylesheet">
     </head>
     <body>
             <h1>Filmliste</h1>
