@@ -1,0 +1,17 @@
+<?php
+/*
+ * Benötige Ausgabe-Variablen
+ * 
+ * $ausgabe['title'] - Titel der HTML-Seite (auch h1-Tag)
+ */
+?>
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8">
+        <title><?= $ausgabe['title'] ?? '' ?></title>
+        <link href="adressen.css" rel="stylesheet">
+    </head>
+    <body>
+        <h1><?= $ausgabe['title'] ?? '' ?></h1>
+        <hr>

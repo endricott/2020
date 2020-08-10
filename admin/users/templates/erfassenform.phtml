@@ -1,0 +1,49 @@
+<?php
+/*
+ * Benötige Ausgabe-Variablen
+ * 
+ * $ausgabe['form']   - Array mit Formulardaten
+ * $ausgabe['fehler'] - Array mit Fehlermeldungen
+ */
+?>
+<form action="<?= $_SERVER['PHP_SELF'] ?>" method="get">
+    <div>
+        <label for="anrede" class="pflicht">Anrede</label>
+        <select name="anrede" id="anrede">
+            <option value="" label="Bitte auswählen"></option>
+            <option value="Frau" <?= 'Frau' == $ausgabe['form']['anrede'] ? 'selected' : '' ?>>Frau</option>
+            <option value="Herr" <?= 'Herr' == $ausgabe['form']['anrede'] ? 'selected' : '' ?>>Herr</option>
+        </select>
+        <span><?= $ausgabe['fehler']['anrede'] ?? '' ?></span>
+    </div>
+
+    <?php
+    $ausgabe['aktivesfeld']  = 'vorname';
+    $ausgabe['aktiveklasse'] = 'pflicht';
+    $ausgabe['aktivertyp']   = 'text';
+    include TEMPLATES . 'inputfeld.phtml';
+    
+    $ausgabe['aktivesfeld']  = 'nachname';
+    include TEMPLATES . 'inputfeld.phtml';
+    
+    $ausgabe['aktivesfeld']  = 'plz';
+    include TEMPLATES . 'inputfeld.phtml';
+    
+    $ausgabe['aktivesfeld']  = 'ort';
+    include TEMPLATES . 'inputfeld.phtml';
+    
+    $ausgabe['aktivesfeld']  = 'telefon';
+    include TEMPLATES . 'inputfeld.phtml';
+    
+    $ausgabe['aktivesfeld']  = 'geburtsdatum';
+    $ausgabe['aktiveklasse'] = '';
+    $ausgabe['aktivertyp']   = 'date';
+    include TEMPLATES . 'inputfeld.phtml';
+    
+    ?>
+    <div>
+        <button type="submit" name="okbutton" value="1">speichern</button>
+    </div>
+
+    <div class='formcaption'>Felder in <span class='pflicht'>blau</span> sind Pflichtfelder</div>
+</form>

@@ -1,0 +1,16 @@
+<?php
+/*
+ * Benötige Ausgabe-Variablen
+ * 
+ * $ausgabe['form']         - Array mit Formulardaten
+ * $ausgabe['fehler']       - Array mit Fehlermeldungen
+ * $ausgabe['aktivesfeld']  - Name bzw. ID des auszugebenden Formularfeldes 
+ * $ausgabe['aktiveklasse'] - CSS-Klasse des Labels
+ * $ausgabe['aktivertyp']   - type-Attribut des input-Tags
+ */
+?>
+<div>
+    <label for="<?= $ausgabe['aktivesfeld'] ?>" class="<?= $ausgabe['aktiveklasse'] ?>"><?= ucfirst($ausgabe['aktivesfeld']) ?></label>
+    <input class="rosa" type="<?= $ausgabe['aktivertyp'] ?>" name="<?= $ausgabe['aktivesfeld'] ?>" id="<?= $ausgabe['aktivesfeld'] ?>" value="<?= $ausgabe['form'][$ausgabe['aktivesfeld']] ?>">
+    <span><?= $ausgabe['fehler'][$ausgabe['aktivesfeld']] ?? '' ?></span>
+</div>
