@@ -1,2 +1,0 @@
-
-db user, db calendar add remove password vergessen
