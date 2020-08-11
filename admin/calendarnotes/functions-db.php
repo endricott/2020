@@ -22,13 +22,13 @@ const METHOD_POST = 'POST';
 const DB_SERVER = 'localhost';
 
 /** @const string Username für Anmeldung am Datenbankserver */
-const DB_USER = 'endricott';
+const DB_USER = 'test';
 
 /** @const string Passwort für Anmeldung am Datenbankserver */
 const DB_PASSWORD = 'kiklopas';
 
 /** @const string Name der Datenbank */
-const DB_NAME = 'filmdb';
+const DB_NAME = 'caldb';
 
 
 /**
