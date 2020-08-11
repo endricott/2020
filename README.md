@@ -6,5 +6,6 @@ todo
 login_form.php nur mit zwei input felder und einen link für password vergessen.
 
 done
-beta calender db 
-addet alexanders file
+beta calender db.
+
+ Alexanders file auch hochgeladet, db kann man testen.
