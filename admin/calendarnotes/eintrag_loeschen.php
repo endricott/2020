@@ -1,23 +1,23 @@
 <?php
 require_once 'functions-db.php';
-require_once 'functions-filmdb.php';
+require_once 'functions-calmdb.php';
 
 
 /** @var int $loeschid ID des geschriebenen Datensatzes */
 $loeschid = intval(getParam('loeschid'));
 
-/** @var string $loeschok  LÃ¶schbestÃ¤tigung */
+/** @var string $loeschok  Löschbestätigung */
 $loeschok = getParam('loeschok');
 
 
 /** @var string $fehler  Fehlermeldung */
 $fehler = '';
 
-/** @var string[] $film Daten des gespeicherten Films */
-$film = [];
+/** @var string[] $one is Kalender eintrag */
+$one = [];
 
-// Wenn gÃ¼ltige Datensatz-ID Ã¼bergeben wurde
-if($loeschid && filmExist($loeschid)) {
+// Wenn gültige Datensatz-ID übergeben wurde
+if($loeschid && calendarExist($loeschid)) {
     
     /*
      * Erfasste Daten aus der Datenbank lesen
@@ -29,24 +29,21 @@ if($loeschid && filmExist($loeschid)) {
     if(!$loeschok) {
         // SQL-Statement erzeugen
         $sql = <<<EOT
-            SELECT id, 
-                   titel,
-                   SUBSTR(inhalt,1,40) AS inhalt, 
-                   land, 
-                   DATE_FORMAT(premiere, '%d.%m.%Y') AS premiere, 
-                   fsk, 
-                   laufzeit
-            FROM filme 
+            SELECT userid, 
+               place, 
+               DATE_FORMAT(startdatetime, '%d.%m.%Y') AS start,
+               ittakes
+               FROM calendarinfo 
             WHERE id = $loeschid
     EOT;
 
         // SQL-Statement an die Datenbank schicken und Ergebnis (Resultset) in $result speichern
         if($result = mysqli_query($db, $sql)) {
             // Den ersten (und einzigen) Datensatz aus dem Resultset holen
-            if($film = mysqli_fetch_assoc($result)) {
-                // Felder fÃ¼r die Ausgabe in HTML-Seite vorbereiten
-                foreach($film as $key => $value) {
-                    $film[$key] = htmlspecialchars($value, ENT_DISALLOWED | ENT_HTML5 | ENT_QUOTES);
+            if($one = mysqli_fetch_assoc($result)) {
+                // Felder für die Ausgabe in HTML-Seite vorbereiten
+                foreach($one as $key => $value) {
+                    $one[$key] = htmlspecialchars($value, ENT_DISALLOWED | ENT_HTML5 | ENT_QUOTES);
                 }
             }
 
@@ -57,13 +54,13 @@ if($loeschid && filmExist($loeschid)) {
             die('DB-Fehler (' . mysqli_errno($db) . ') ' . mysqli_error($db));
         }
     }
-    // LÃ¶sch-BestÃ¤tigung erhalten
+    // Lösch-Bestätigung erhalten
     else {
         /*
-         * Datensatz lÃ¶schen
+         * Datensatz löschen
          */
         // SQL-Statement erzeugen
-        $sql = "DELETE FROM filme WHERE id = $loeschid"; // WHERE NICHT VERGESSEN!!!
+        $sql = "DELETE FROM calendarinfo WHERE id = $loeschid"; // WHERE NICHT VERGESSEN!!!
         
         // Statement an die DB schicken
         mysqli_query($db, $sql) || die('DB-Fehler');
@@ -71,8 +68,8 @@ if($loeschid && filmExist($loeschid)) {
         // Verbindung zur Datenbank trennen
         mysqli_close($db);
         
-        // Weiterleiten auf BestÃ¤tigungsseite
-        header("location: film-loeschen-ok.php");
+        // Weiterleiten auf Bestätigungsseite
+        header("location: eintrag-loeschen-ok.php");
         
     }
 
@@ -80,12 +77,12 @@ if($loeschid && filmExist($loeschid)) {
     mysqli_close($db);
 }
 elseif(!$loeschid) {
-    // Datensatz-ID wurde nicht Ã¼bergeben
+    // Datensatz-ID wurde nicht übergeben
     $fehler = 'Datensatz-ID fehlt!';
 }
 else {
     // Datensatz mit dieser ID existiert nicht
-    $fehler = 'UngÃ¼ltige Datensatz-ID!';
+    $fehler = 'Ungültige Datensatz-ID!';
 }
 
 
@@ -96,22 +93,22 @@ else {
 <!DOCTYPE html>
 <html lang="de">
     <head>
-        <title>Film lÃ¶schen</title>
+        <title>Eintrag löschen</title>
         <meta charset="UTF-8">
-        <link href="../styles/style.css" rel="stylesheet">
+        <link href="../../styles/style.css" rel="stylesheet">
     </head>
     <body>
         <div class="wrapper">
-            <h1>Film lÃ¶schen!</h1>
+            <h1>Eintrag löschen!</h1>
             <?php if($fehler): ?>
             <h3><span><?= $fehler ?></span></h3>
             
             
             <?php else: ?>
-            <h4><span>Soll dieser Film wirklich gelÃ¶scht werden?</span></h4>
+            <h4><span>Soll dieser Eintrag wirklich gelöscht werden?</span></h4>
             
             <table>
-                <?php foreach($film as $name => $wert): ?>
+                <?php foreach($one as $name => $wert): ?>
                 <tr>
                     <th><?= ucfirst($name) ?></th>
                     <td><?= $wert ?></td>
@@ -120,14 +117,14 @@ else {
             </table>
             
             <form action="<?= $_SERVER['PHP_SELF'] ?>" method="get">
-                <input type="hidden" name="loeschid" value="<?= $film['id'] ?>">
+                <input type="hidden" name="loeschid" value="<?= $one['id'] ?>">
                 <div class="center">
-                    <button type="submit" name="loeschok" value="1">lÃ¶schen</button>
+                    <button type="submit" name="loeschok" value="1">löschen</button>
                 </div>
             </form>
             
             <?php endif; ?>
-            <h3><a href="filmliste.php">zurÃ¼ck zur Filmliste</a></h3>
+            <h3><a href="kundenlistesession.php">zurück zur Eintrag</a></h3>
         </div>
     </body>
 </html>
