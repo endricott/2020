@@ -124,7 +124,7 @@ $pag_opt = "?userid={$_SESSION['suche']}&order={$_SESSION['sort']}&dest=$dest&se
     <head>
         <meta charset="UTF-8">
         <title>kalenderliste</title>
-        <link href="../styles/style.css" rel="stylesheet">
+        <link href="../../styles/style.css" rel="stylesheet">
     </head>
     <body>
             <h1>Eintragliste</h1>

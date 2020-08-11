@@ -19,7 +19,7 @@ if($id) {
     $sql = <<<EOT
         SELECT userid, 
                place, 
-               DATE_TIME_FORMAT(startdatetime, '%d.%m.%Y') AS start,
+               DATE_FORMAT(startdatetime, '%d.%m.%Y') AS start,
                ittakes
         FROM calendarinfo 
         WHERE id = $id
@@ -68,7 +68,7 @@ EOT;
                 <?php endforeach; ?>
             </table>
             <?php endif; ?>
-            <h3><a href="kundenliste.php">Kundenliste anzeigen</a></h3>
+            <h3><a href="kundenlistesession.php">Kundenliste anzeigen</a></h3>
         </div>
     </body>
 </html>

@@ -1,22 +1,22 @@
 <?php
 require_once 'functions-db.php';
-require_once 'functions-filmdb.php';
+require_once 'functions-caldb.php';
 
 /** @var string[] $form alle Formularfelder */
 $form = [];
 
 
-//** @var string $updateid  ID des zu Ã¤ndernden Datensatzes */
+//** @var string $updateid  ID des zu ändernden Datensatzes */
 $updateid = getParam('updateid');
 
-/** @var string[] $laender  Array mit allen LÃ¤ndern */
+/** @var string[] $laender  Array mit allen Ländern */
 //$laender = getLaender();
 
 /*
- *  PrÃ¼fen, ob ID zum Ã„ndern Ã¼bergeben wurde und ob ID korrekt ist
+ *  Prüfen, ob ID zum Ändern übergeben wurde und ob ID korrekt ist
  */
 if($updateid && calendarExist($updateid)) {
-    // ID zum Ã„ndern wurde Ã¼bergeben.
+    // ID zum Ändern wurde übergeben.
     // Datensatz aus DB lesen und zur Anzeige vorbereiten
     
     // Verbindung zur Datenbank aufbauen
@@ -30,7 +30,7 @@ if($updateid && calendarExist($updateid)) {
 
         // den ersten (und einzigen) Datensatz aus dem Resultset holen
         if($form = mysqli_fetch_assoc($result)) {
-            // Felder fÃ¼r die Ausgabe in HTML-Seite vorbereiten
+            // Felder für die Ausgabe in HTML-Seite vorbereiten
             foreach($form as $key => $value) {
                 $form[$key] = htmlspecialchars($value, ENT_DISALLOWED | ENT_HTML5 | ENT_QUOTES);
             }
@@ -44,16 +44,16 @@ if($updateid && calendarExist($updateid)) {
     }
 }
 /*
- * Prüfen, ob Formular abgeschickt wurde
- * Falls ja, dann weitere PrÃ¼fungen durchfÃ¼hren
+ * Pr?fen, ob Formular abgeschickt wurde
+ * Falls ja, dann weitere Prüfungen durchführen
  */
 elseif(!empty($_GET['okbutton'])) {
     
-    /** @var string[] $fehler Fehlermeldungen fÃ¼r Formularfelder */
+    /** @var string[] $fehler Fehlermeldungen für Formularfelder */
     $fehler = [];
 
     /*
-     * Werte sÃ¤mtlicher Formularfelder holen
+     * Werte sämtlicher Formularfelder holen
      */
     $form['id']       = getParam('id');
     $form['subject']    = getParam('subject');
@@ -68,46 +68,46 @@ elseif(!empty($_GET['okbutton'])) {
     $form['enddatetime'] = getParam('enddatetime');
     
 
-    // ID prÃ¼fen
+    // ID prüfen
     if(preg_match("/[^0-9]/", $form['id']) || $form['id'] < 1) {
-        $fehler['id'] = 'Ungültige Datensatz-ID!';
+        $fehler['id'] = 'Ung?ltige Datensatz-ID!';
     }
     elseif(!calendarExist($form['id'])) {
         $fehler['id'] = 'Datensatz nicht gefunden!';
     }
     
     
-    // kalenderthema prüfen
+    // kalenderthema pr?fen
     if(!$form['subject']) {
         $fehler['subject'] = 'Bitte Kalender Thema angeben';
     }
     elseif(strlen($form['subject']) > 255) {
-        $fehler['subject'] = 'das Thema darf höchstens 255 Zeichen lang sein';
+        $fehler['subject'] = 'das Thema darf h?chstens 255 Zeichen lang sein';
     }
     
-    // Inhaltsangabe prÃ¼fen
+    // Inhaltsangabe prüfen
     if(strlen($form['description']) > 255) {
-        $fehler['description'] = 'Inhaltsangabe darf höchstens 255 Zeichen lang sein';
+        $fehler['description'] = 'Inhaltsangabe darf h?chstens 255 Zeichen lang sein';
     }
     
-//    // Land prÃ¼fen
+//    // Land prüfen
 //    if(!$form['land']) {
-//        $fehler['land'] = 'Bitte Land auswÃ¤hlen';
+//        $fehler['land'] = 'Bitte Land auswählen';
 //    }
 //    elseif(!array_key_exists($form['land'], $laender)) {
-//        $fehler['land'] = 'UngÃ¼ltiges Land eingeben';
+//        $fehler['land'] = 'Ungültiges Land eingeben';
 //        $form['land'] = null;
 //    }
     
-    // Premierendatum prÃ¼fen (wenn angegeben)
+    // Premierendatum prüfen (wenn angegeben)
 //    if($form['premiere']) {
 //        // Premierendatum extrahieren
 //        $jahr  = substr($form['premiere'], 0, 4);
 //        $monat = substr($form['premiere'], 5, 2);
 //        $tag   = substr($form['premiere'], 8, 2);
-//        // Datum auf allgemeine GÃ¼ltigkeit prÃ¼fen
+//        // Datum auf allgemeine Gültigkeit prüfen
 //        if(!checkdate($monat, $tag, $jahr)) {
-//            $fehler['premiere'] = 'Bitte gÃ¼ltiges Premierendatum eingeben';
+//            $fehler['premiere'] = 'Bitte gültiges Premierendatum eingeben';
 //        }
 //    }
 //    else {
@@ -115,9 +115,9 @@ elseif(!empty($_GET['okbutton'])) {
 //        $form['premiere'] = null;
 //    }
 //    
-    // Altersfreigabe prÃ¼fen (wenn angegeben)
+    // Altersfreigabe prüfen (wenn angegeben)
 //    if(strlen($form['fsk']) && !in_array($form['fsk'], ['null', '0', '6', '12', '16', '18'])) {
-//        $fehler['fsk'] = 'Bitte gÃ¼ltige Altersfreigabe eingeben';
+//        $fehler['fsk'] = 'Bitte gültige Altersfreigabe eingeben';
 //        $form['fsk'] = '';
 //    }
 //    elseif('null' == $form['fsk']) {
@@ -125,9 +125,9 @@ elseif(!empty($_GET['okbutton'])) {
 //        $form['fsk'] = null;
 //    }
     
-    // Laufzeit prÃ¼fen (wenn angegeben)
-    if($form['ittakes'] && !preg_match("/^(2[0-3]|[01]{0,1}[0-9])(:[0-5]{0,1}[0-9]){2}$/", $form['laufzeit'])) {
-        $fehler['ittakes'] = 'Bitte gültige Laufzeit eingeben';
+    // Laufzeit prüfen (wenn angegeben)
+    if($form['ittakes'] && !preg_match("/^(2[0-3]|[01]{0,1}[0-9])(:[0-5]{0,1}[0-9]){2}$/", $form['ittakes'])) {
+        $fehler['ittakes'] = 'Bitte g?ltige Laufzeit eingeben';
     }
     
     /*
@@ -140,7 +140,7 @@ elseif(!empty($_GET['okbutton'])) {
         // Verbindung zur Datenbank aufbauen
         $db = dbConnect();
         
-        // Formularwerte fÃ¼r die Datenbank escapen
+        // Formularwerte für die Datenbank escapen
         foreach($form as $key => $value) {
             // Strings escapen
             if(is_string($value)) {
@@ -148,10 +148,10 @@ elseif(!empty($_GET['okbutton'])) {
             }
         }
         
-        // String fÃ¼r Premierendatum erzeugen (wegen mÃ¶glichem NULL-Wert)
+        // String für Premierendatum erzeugen (wegen möglichem NULL-Wert)
 //        $premiere = is_null($form['premiere']) ? 'NULL' : "'${form['premiere']}'";
 //        
-//        // String fÃ¼r FSK erzeugen (wegen mÃ¶glichem NULL-Wert)
+//        // String für FSK erzeugen (wegen möglichem NULL-Wert)
 //        $fsk = is_null($form['fsk']) ? 'NULL' : $form['fsk'];
         
         // SQL-Statement erzeugen
@@ -172,14 +172,14 @@ EOT;
         // Verbindung zur Datenbank trennen
         mysqli_close($db);
 
-        // Weiterleiten auf BestÃ¤tigungsseite, dabei die ID des erzeugten Datensatzes Ã¼bergeben
+        // Weiterleiten auf Bestätigungsseite, dabei die ID des erzeugten Datensatzes übergeben
         header("location: eintrag-aendern-ok.php?id=" . $form['id']);
     }
     /*
      * Wenn Fehler in Formularfeldern gefunden
      */
     else {
-        // Formularfelder fÃ¼r die Ausgabe im Formular vorbereiten
+        // Formularfelder für die Ausgabe im Formular vorbereiten
         foreach($form as $key => $value) {
             if(is_string($value)) {
                 $form[$key] = htmlspecialchars($value, ENT_DISALLOWED | ENT_HTML5 | ENT_QUOTES);
@@ -192,16 +192,16 @@ EOT;
 <!DOCTYPE html>
 <html lang="de">
     <head>
-        <title>passwort ändern</title>
+        <title>passwort ?ndern</title>
         <meta charset="UTF-8">
         <link href="../../styles/style.css" rel="stylesheet">
     </head>
     <body>
         <div class="wrapper">
-            <h1>Eintrag ändern!</h1>
+            <h1>Eintrag ?ndern!</h1>
             <?php if(!empty($fehler['id'])): ?>
             <h3><span><?= $fehler['id'] ?></span></h3>
-            <h4><a href="kundenliste.php">zurück zur Übersicht</a></h4>
+            <h4><a href="kundenlistesession.php">zur?ck zur ?bersicht</a></h4>
             <?php else: ?>
             <form action="<?= $_SERVER['PHP_SELF'] ?>" method="get">
                 <input type="hidden" name="id" id="id" value="<?= $form['id'] ?>">
@@ -221,7 +221,7 @@ EOT;
 <!--                <div>
                     <label for="land" class="pflicht">Land</label>
                     <select name="land" id="land">
-                        <option value="" label="Bitte auswÃ¤hlen"></option>
+                        <option value="" label="Bitte auswählen"></option>
                         <?php foreach($laender as $kuerzel => $land): ?>
                         <option value="<?= $kuerzel ?>" <?= $kuerzel == $form['land'] ? 'selected' : '' ?>><?= $land ?></option>
                         <?php endforeach; ?>
