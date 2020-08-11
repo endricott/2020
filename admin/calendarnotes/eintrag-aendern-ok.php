@@ -4,8 +4,7 @@ require_once 'functions-db.php';
 /** @var int $id ID des geschriebenen Datensatzes */
 $id = intval(getParam('id'));
 
-/** @var string[] $film Daten des gespeicherten Films */
-$film = [];
+$one = [];
 
 // Daten holen, wenn ID übergeben wurde
 if($id) {
@@ -18,23 +17,21 @@ if($id) {
 
     // SQL-Statement erzeugen
     $sql = <<<EOT
-        SELECT titel,
-               SUBSTR(inhalt,1,70) as inhalt, 
-               land, 
-               DATE_FORMAT(premiere, '%d.%m.%Y') AS premiere,
-               fsk, 
-               laufzeit
-        FROM filme 
+        SELECT userid, 
+               place, 
+               DATE_TIME_FORMAT(startdatetime, '%d.%m.%Y') AS start,
+               ittakes
+        FROM calendarinfo 
         WHERE id = $id
 EOT;
 
     // SQL-Statement an die Datenbank schicken und Ergebnis (Resultset) in $result speichern
     if($result = mysqli_query($db, $sql)) {
         // Den ersten (und einzigen) Datensatz aus dem Resultset holen
-        if($film = mysqli_fetch_assoc($result)) {
+        if($one = mysqli_fetch_assoc($result)) {
             // Felder für die Ausgabe in HTML-Seite vorbereiten
-            foreach($film as $key => $value) {
-                $film[$key] = htmlspecialchars($value, ENT_DISALLOWED | ENT_HTML5 | ENT_QUOTES);
+            foreach($one as $key => $value) {
+                $one[$key] = htmlspecialchars($value, ENT_DISALLOWED | ENT_HTML5 | ENT_QUOTES);
             }
         }
         
@@ -53,17 +50,17 @@ EOT;
 <!DOCTYPE html>
 <html lang="de">
     <head>
-        <title>Film ändern</title>
+        <title>Eintrag �ndern</title>
         <meta charset="UTF-8">
-        <link href="../styles/style.css" rel="stylesheet">
+        <link href="../../styles/style.css" rel="stylesheet">
     </head>
     <body>
         <div class="wrapper">
-            <h1>Die Änderung war erfolgreich</h1>
-            <?php if($film): ?>
+            <h1>Die �nderung war erfolgreich</h1>
+            <?php if($one): ?>
             <table>
                 <caption>Sie haben folgende Daten eingegeben:</caption>
-                <?php foreach($film as $name => $wert): ?>
+                <?php foreach($one as $name => $wert): ?>
                 <tr>
                     <th><?= ucfirst($name) ?></th>
                     <td><?= $wert ?></td>
@@ -71,7 +68,7 @@ EOT;
                 <?php endforeach; ?>
             </table>
             <?php endif; ?>
-            <h3><a href="filmliste.php">Filmliste anzeigen</a></h3>
+            <h3><a href="kundenliste.php">Kundenliste anzeigen</a></h3>
         </div>
     </body>
 </html>
