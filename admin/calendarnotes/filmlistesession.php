@@ -19,7 +19,7 @@ $_SESSION['seite'] = $_SESSION['seite'] ?? '1';
  *  Suchformular auswerten und die WHERE-Klausel für die Abfrage erstellen
  */
 /** @var string $suche  Als Parameter übergebener Suchstring für das Titelfeld */
-$suche = getParam('titel');
+$suche = getParam('userid');
 if(!is_null($suche)) {
     $_SESSION['suche'] = $suche;
     $_SESSION['seite'] = 1;
@@ -47,7 +47,7 @@ if(!is_null($dest)) {
     
 }
 /** @var string $where  Abfragebedingung für die Filmsuche */
-$where = $_SESSION['suche'] ? "WHERE f.titel LIKE '%{$_SESSION['suche']}%'" : '';
+$where = $_SESSION['suche'] ? "WHERE f.userid LIKE '%{$_SESSION['suche']}%'" : '';
 //$seite = getParam('seite') ? getParam('seite') : '1';
 $seite = getParam('seite');
 if(!is_null($seite)) {
@@ -70,7 +70,7 @@ $db = dbConnect();
 $anzahl = 0;
 //SQL-Statement zum Ermitteln der Anzahl der gefundenen Filme
 //$sql = "SELECT COUNT(id) AS anzahl FROM filme $where";
-$sql = "SELECT id FROM filme AS f $where";
+$sql = "SELECT id FROM calendarinfo AS f $where";
 // SQL-Statement an die Datenbank schicken und Ergebnis (Resultset) in $result speichern
 if($result = mysqli_query($db, $sql)) {
     $anzahl = mysqli_num_rows($result);
@@ -87,10 +87,8 @@ $limit = "LIMIT $offset, " . PROSEITE;
 $order = "ORDER BY {$_SESSION['sort']}  {$_SESSION['dest']}";
 //SQL-Statement zum Lesen der anzuzeigenden Filme
 $sql = <<<EOT
-SELECT f.id, f.titel, r.titel AS Filmreihe, f.inhalt, premiere, laufzeit, l.bezeichnung
-FROM filme AS f
-LEFT JOIN laender AS l ON f.land = l.id
-LEFT JOIN filmreihen AS r ON f.filmreihe = r.id
+SELECT f.id, f.subject, f.userid, place, startdatetime, enddatetime, note, person, description, ittakes, longlat
+FROM calendarinfo AS f
 $where
 $order
 $limit
@@ -118,7 +116,7 @@ else {
 // Verbindung zum DB-Server schließen
 mysqli_close($db);
 
-$pag_opt = "?titel={$_SESSION['suche']}&order={$_SESSION['sort']}&dest=$dest&seite=";
+$pag_opt = "?userid={$_SESSION['suche']}&order={$_SESSION['sort']}&dest=$dest&seite=";
 // Ausgabe der Seite
 ?>
 <!DOCTYPE html>
@@ -130,10 +128,10 @@ $pag_opt = "?titel={$_SESSION['suche']}&order={$_SESSION['sort']}&dest=$dest&sei
     </head>
     <body>
             <h1>Filmliste</h1>
-            <h3><?= number_format($anzahl, 0, ',', '.') ?> Filme gefunden</h3>
+            <h3><?= number_format($anzahl, 0, ',', '.') ?> Eintr�ge gefunden</h3>
             <form action="<?= $_SERVER['PHP_SELF'] ?>" method="get" class="suchform">
                 <div>
-                    <label for="titelsuche">Suche nach Filmtitel</label>
+                    <label for="titelsuche">Suche nach Benutzer</label>
                     <input type="hidden" name="sort" value="<?=  $_SESSION['sort'] ?>">
                     <input type="hidden" name="dest" value="<?= $dest ?>">
                     <input type="text" name="titel" id="titel" value="<?= $titel ?>">
@@ -151,12 +149,16 @@ $pag_opt = "?titel={$_SESSION['suche']}&order={$_SESSION['sort']}&dest=$dest&sei
                 </div>
                 <tr>
                     <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=id&titel=<?= $titel ?>">ID</a></th>
-                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=titel&titel=<?= $titel ?>">Titel</a></th>
-                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=filmreihe&titel=<?= $titel ?>">Titel der Filmreihe</a></th>
-                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=inhalt&titel=<?= $titel ?>">Inhalt</a></th>
-                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=premiere&titel=<?= $titel ?>">Premiere</a></th>
-                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=laufzeit&titel=<?= $titel ?>">Laufzeit</a></th>
-                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=land&titel=<?= $titel ?>">Land</a></th>
+                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=subject&titel=<?= $titel ?>">Thema</a></th>
+                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=userid&titel=<?= $titel ?>">Kunden ID</a></th>
+                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=place&titel=<?= $titel ?>">Platz</a></th>
+                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=startdatetime&titel=<?= $titel ?>">Start Datum</a></th>
+                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=enddatetime&titel=<?= $titel ?>">Ende Datum</a></th>
+                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=note&titel=<?= $titel ?>">Notiz</a></th>
+                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=person&titel=<?= $titel ?>">Persone</a></th>
+                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=description&titel=<?= $titel ?>">Beschreibung</a></th>
+                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=ittakes&titel=<?= $titel ?>">Zeit</a></th>
+                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=longlat&titel=<?= $titel ?>">Long Lat</a></th>
                     <th colspan="2">&nbsp;</th>
                 </tr>
                 <?php foreach($filme as $film): ?>
@@ -165,7 +167,7 @@ $pag_opt = "?titel={$_SESSION['suche']}&order={$_SESSION['sort']}&dest=$dest&sei
                     <td><?= $value ?></td>
                     <?php endforeach; ?>  
                     <td><a href="film_aendern.php?updateid=<?= $film['id'] ?>">bearbeiten</a></td>
-                    <td><a href="film_loeschen.php?loeschid=<?= $film['id'] ?>">löschen</a></td>
+                    <td><a href="film_loeschen.php?loeschid=<?= $film['id'] ?>">l�schen</a></td>
                 </tr>
                 <?php endforeach; ?>
             </table>
