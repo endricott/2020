@@ -121,15 +121,15 @@ $pag_opt = "?userid=$suche&order=$sort&dest=$dest&seite=";
                 <tr>
                     <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=id&titel=<?= $titel ?>">ID</a></th>
                     <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=subject&titel=<?= $titel ?>">Thema</a></th>
-                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=note&titel=<?= $titel ?>">Notiz</a></th>
                     <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=userid&titel=<?= $titel ?>">Kunden ID</a></th>
-                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=person&titel=<?= $titel ?>">Persone</a></th>
-                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=ittakes&titel=<?= $titel ?>">Zeit</a></th>
                     <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=place&titel=<?= $titel ?>">Platz</a></th>
-                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=description&titel=<?= $titel ?>">Beschreibung</a></th>
-                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=longlat&titel=<?= $titel ?>">Long Lat</a></th>
                     <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=startdatetime&titel=<?= $titel ?>">Start Datum</a></th>
                     <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=enddatetime&titel=<?= $titel ?>">Ende Datum</a></th>
+                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=note&titel=<?= $titel ?>">Notiz</a></th>
+                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=person&titel=<?= $titel ?>">Persone</a></th>
+                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=description&titel=<?= $titel ?>">Beschreibung</a></th>
+                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=ittakes&titel=<?= $titel ?>">Zeit</a></th>
+                    <th><a href="<?= $_SERVER['PHP_SELF'] ?>?order=longlat&titel=<?= $titel ?>">Long Lat</a></th>
                     <th colspan="2">&nbsp;</th>
                 </tr>
                 <?php foreach($filme as $film): ?>
