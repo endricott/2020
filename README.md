@@ -3,9 +3,10 @@ project IHK
 calendar
 
 todo
-login_form.php nur mit zwei input felder und einen link für password vergessen.
+login_form.php nur mit zwei input felder und einen link fÃ¼r password vergessen.
 
 done
 beta calender db.
 
  Alexanders file auch hochgeladet, db kann man testen.
+Alexander hier
